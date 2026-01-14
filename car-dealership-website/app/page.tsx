@@ -1,3 +1,4 @@
+export const runtime = 'edge';
 import { Hero } from "@/components/sections/hero"
 import { FeaturedVehicles } from "@/components/sections/featured-vehicles"
 import { ServicesSection } from "@/components/sections/services"

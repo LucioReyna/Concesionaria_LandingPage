@@ -1,4 +1,5 @@
 export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"

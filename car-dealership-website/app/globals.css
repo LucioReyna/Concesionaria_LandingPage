@@ -4,63 +4,43 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Graphite/Metallic Dark Theme */
-  --background: #0f1014;
-  --foreground: #f8fafc;
+  /* Luxury Dark Palette */
+  --background: #050505;
+  --foreground: #f4f4f4;
 
-  --card: #181920;
-  --card-foreground: #f8fafc;
+  --card: #0a0a0a;
+  --card-foreground: #f4f4f4;
 
-  --popover: #181920;
-  --popover-foreground: #f8fafc;
+  --popover: #0a0a0a;
+  --popover-foreground: #f4f4f4;
 
-  --primary: #1e6bff;
-  --primary-foreground: #ffffff;
+  --primary: #c5a059;
+  /* Refined Gold */
+  --primary-foreground: #050505;
 
-  --secondary: #272a34;
-  --secondary-foreground: #f8fafc;
+  --secondary: #111111;
+  --secondary-foreground: #f4f4f4;
 
-  --muted: #272a34;
-  --muted-foreground: #94a3b8;
+  --muted: #111111;
+  --muted-foreground: #8a8a8a;
 
-  --accent: #272a34;
-  --accent-foreground: #1e6bff;
+  --accent: #111111;
+  --accent-foreground: #c5a059;
 
-  --destructive: #ef4444;
-  --destructive-foreground: #ffffff;
+  --destructive: #7f1d1d;
+  --destructive-foreground: #f4f4f4;
 
-  --border: #333645;
-  --input: #272a34;
-  --ring: #1e6bff;
+  --border: #1a1a1a;
+  --input: #111111;
+  --ring: #c5a059;
 
-  --radius: 0.75rem;
-}
-
-/* Force dark mode */
-.dark {
-  --background: #0f1014;
-  --foreground: #f8fafc;
-  --card: #181920;
-  --card-foreground: #f8fafc;
-  --popover: #181920;
-  --popover-foreground: #f8fafc;
-  --primary: #1e6bff;
-  --primary-foreground: #ffffff;
-  --secondary: #272a34;
-  --secondary-foreground: #f8fafc;
-  --muted: #272a34;
-  --muted-foreground: #94a3b8;
-  --accent: #272a34;
-  --accent-foreground: #1e6bff;
-  --destructive: #ef4444;
-  --destructive-foreground: #ffffff;
-  --border: #333645;
-  --input: #272a34;
-  --ring: #1e6bff;
+  --radius: 0.25rem;
+  /* Sharper lines for precision luxury */
 }
 
 @theme inline {
-  --font-sans: "Inter", system-ui, sans-serif;
+  --font-sans: var(--font-outfit), system-ui, sans-serif;
+  --font-serif: var(--font-serif), serif;
   --font-mono: "Geist Mono", monospace;
 
   --color-background: var(--background);
@@ -83,10 +63,35 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
   --radius-xl: calc(var(--radius) + 4px);
+
+  --animate-fade-in-up: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-reveal: reveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes reveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+  }
 }
 
 @layer base {
@@ -98,16 +103,34 @@
   body {
     background-color: var(--background);
     color: var(--foreground);
-    /* Soft metallic gradient background */
-    background-image: radial-gradient(circle at top right, #1e2029 0%, transparent 40%),
-      radial-gradient(circle at bottom left, #1a1c24 0%, transparent 40%);
+    background-image:
+      radial-gradient(circle at 0% 0%, #151515 0%, transparent 50%),
+      radial-gradient(circle at 100% 100%, #101010 0%, transparent 50%);
     background-attachment: fixed;
+    letter-spacing: -0.01em;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  p {
+    line-height: 1.6;
+    color: var(--muted-foreground);
   }
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -115,10 +138,26 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 4px;
+  background: #222;
+  border-radius: 0px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--muted-foreground);
+  background: var(--primary);
+}
+
+.glass-card {
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.gold-gradient {
+  background: linear-gradient(135deg, #c5a059 0%, #ecd4a1 50%, #c5a059 100%);
+}
+
+.text-gold {
+  background: linear-gradient(135deg, #c5a059 0%, #f1e0c5 50%, #c5a059 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }

@@ -1,9 +1,9 @@
 // Brand configuration - easy to swap for different dealerships
 export const siteConfig = {
-  name: "AutoElite Motors",
-  tagline: "Vehículos Premium Nuevos y Seminuevos",
+  name: "AutoElite",
+  tagline: "El Estándar Supremo del Automóvil",
   description:
-    "Encuentra tu vehículo perfecto en AutoElite Motors. Autos certificados, financiamiento flexible y servicio excepcional.",
+    "AutoElite es la curaduría definitiva de vehículos de alto rendimiento y lujo. Rendimiento inigualable, artesanía absoluta y servicios de conserjería personalizados.",
 
   // Contact
   phone: "(555) 123-4567",

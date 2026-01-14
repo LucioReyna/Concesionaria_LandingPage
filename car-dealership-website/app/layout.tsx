@@ -1,24 +1,28 @@
 export const runtime = 'edge';
 import type React from "react"
 import type { Metadata, Viewport } from "next"
-import { Inter, Geist_Mono } from "next/font/google"
+import { Outfit, Cormorant_Garamond } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { Toaster } from "@/components/ui/toaster"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import "./globals.css"
 
-const inter = Inter({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
+const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" })
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-serif"
+})
 
 export const metadata: Metadata = {
   title: {
-    default: "AutoElite Motors | Vehículos Premium Nuevos y Usados",
-    template: "%s | AutoElite Motors",
+    default: "AutoElite | Curaduría Automotriz de Lujo",
+    template: "%s | AutoElite",
   },
   description:
-    "Encuentra tu vehículo perfecto en AutoElite Motors. Explora nuestro inventario seleccionado de autos nuevos y usados certificados con opciones de financiamiento flexibles.",
-  keywords: ["concesionaria", "autos usados", "autos nuevos", "financiamiento", "seminuevos certificados"],
+    "Descubra la colección definitiva de vehículos de alto rendimiento y lujo en AutoElite. Rendimiento inigualable y servicios de conserjería personalizados.",
+  keywords: ["autos de lujo", "concesionaria premium", "vehículos exóticos", "conserjería automotriz", "AutoElite"],
   generator: "v0.app",
   icons: {
     icon: [
@@ -51,8 +55,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="es">
-      <body className={`font-sans antialiased`}>
+    <html lang="es" className={`${outfit.variable} ${cormorant.variable}`} suppressHydrationWarning>
+      <body className="font-sans antialiased text-foreground bg-background">
         <Header />
         <main className="min-h-screen">{children}</main>
         <Footer />

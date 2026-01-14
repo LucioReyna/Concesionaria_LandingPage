@@ -22,19 +22,16 @@ const services = [
 
 export function ServicesSection() {
     return (
-        <section id="financing" className="py-20 bg-background/50 relative overflow-hidden">
-            {/* Decorator */}
-            <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-
-            <div className="container mx-auto px-4 relative z-10">
+        <section id="services" className="py-32 bg-background relative overflow-hidden border-t border-white/5">
+            <div className="container mx-auto px-6 relative z-10">
                 <SectionTitle
-                    title="Financiación y Servicios"
-                    subtitle="Soluciones integrales para acompañarte en cada kilómetro."
+                    title="Exclusividad y Soporte"
+                    subtitle="Servicios de conserjería diseñados para superar las expectativas más exigentes."
                     align="center"
-                    className="mb-16"
+                    className="mb-20"
                 />
 
-                <div className="grid md:grid-cols-3 gap-6">
+                <div className="grid md:grid-cols-3 gap-8">
                     {services.map((service, index) => (
                         <ServiceCard key={index} {...service} />
                     ))}

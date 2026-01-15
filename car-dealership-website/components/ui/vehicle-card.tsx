@@ -20,7 +20,7 @@ export function VehicleCard({ vehicle }: VehicleCardProps) {
   return (
     <Link href={`/inventario/${vehicle.slug}`}>
       <Card className="group overflow-hidden rounded-none border-white/5 bg-card/50 hover:bg-card hover:border-primary/30 transition-all duration-500">
-        <div className="relative aspect-[4/5] overflow-hidden">
+        <div className="relative aspect-[3/2] md:aspect-[4/5] overflow-hidden">
           <Image
             src={vehicle.images[0] || "/placeholder.svg"}
             alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}

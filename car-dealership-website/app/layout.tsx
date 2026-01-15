@@ -56,7 +56,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={`${outfit.variable} ${cormorant.variable}`} suppressHydrationWarning>
-      <body className="font-sans antialiased text-foreground bg-background">
+      <body className="font-sans antialiased text-foreground bg-background" suppressHydrationWarning>
         <Header />
         <main className="min-h-screen">{children}</main>
         <Footer />

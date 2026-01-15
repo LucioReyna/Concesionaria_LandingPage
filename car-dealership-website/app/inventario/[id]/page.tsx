@@ -6,6 +6,7 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { vehicles } from "@/lib/mock-data"
 import { VehicleCard } from "@/components/ui/vehicle-card"
+import { VehicleGallery } from "@/components/ui/vehicle-gallery"
 import { ArrowLeft, Gauge, Settings, Fuel, CheckCircle, Share2 } from "lucide-react"
 
 interface PageProps {
@@ -55,31 +56,10 @@ export default async function VehicleDetailPage({ params }: PageProps) {
                 <div className="grid lg:grid-cols-3 gap-16">
                     {/* Left Column: Gallery & Details */}
                     <div className="lg:col-span-2 space-y-20">
-                        <div className="space-y-8">
-                            <div className="relative aspect-[16/9] rounded-none overflow-hidden border border-white/5 bg-black">
-                                <Image
-                                    src={vehicle.images[0] || "/placeholder.svg"}
-                                    alt={`${vehicle.make} ${vehicle.model}`}
-                                    fill
-                                    className="object-cover opacity-90"
-                                    priority
-                                />
-                            </div>
-
-                            {/* Thumbnails */}
-                            <div className="grid grid-cols-4 gap-6">
-                                {[1, 2, 3, 4].map((_, i) => (
-                                    <div key={i} className="relative aspect-video rounded-none overflow-hidden border border-white/5 cursor-pointer hover:border-primary/40 transition-all opacity-50 hover:opacity-100 bg-card">
-                                        <Image
-                                            src={vehicle.images[0] || "/placeholder.svg"}
-                                            alt="Gallery"
-                                            fill
-                                            className="object-cover"
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
+                        <VehicleGallery
+                            images={vehicle.images}
+                            alt={`${vehicle.make} ${vehicle.model}`}
+                        />
 
                         <div className="space-y-12">
                             <h3 className="text-[10px] tracking-[0.3em] uppercase text-primary font-medium border-b border-white/5 pb-4">Especificaciones Destacadas</h3>

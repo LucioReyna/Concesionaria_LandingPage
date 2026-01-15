@@ -157,6 +157,27 @@ export const vehicles: Vehicle[] = [
     isFeatured: false,
     highlights: ["Práctica", "Confiable", "Familiar"],
   },
+  {
+    id: "7",
+    slug: "2017-ford-fiesta-kinetic-design",
+    make: "Ford",
+    model: "Fiesta Kinetic Design",
+    year: 2017,
+    price: 12500,
+    mileage: 65000,
+    condition: "Usado",
+    bodyType: "Hatchback",
+    transmission: "Manual",
+    fuelType: "Gasolina",
+    exteriorColor: "Gris Tungsteno",
+    interiorColor: "Negro",
+    engineSize: "1.6L Sigma",
+    vin: "9BFHA5X6HT123456",
+    features: ["Control de Estabilidad (ESP)", "7 Airbags", "Techo Solar Eléctrico", "Sync 3 con Apple CarPlay"],
+    images: ["/ford-fiesta-kinetic-grey-front.png", "/ford-fiesta-kinetic-grey-rear.png", "/ford-fiesta-kinetic-interior.png"],
+    isFeatured: true,
+    highlights: ["Diseño Kinetic", "Seguridad Líder en Clase", "Excelente Estado"],
+  },
 ]
 
 export const testimonials: Testimonial[] = [

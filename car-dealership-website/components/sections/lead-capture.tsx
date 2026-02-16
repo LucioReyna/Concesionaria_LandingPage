@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
-import { CheckCircle, Clock } from "lucide-react"
+import { CheckCircle, Clock, Loader2 } from "lucide-react"
 import { vehicles } from "@/lib/mock-data"
 
 export function LeadCapture() {
@@ -20,11 +20,16 @@ export function LeadCapture() {
     phone: "",
     model: "",
     message: "",
+    website: "", // Honeypot
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const uniqueModels = [...new Set(vehicles.map((v) => `${v.year} ${v.make} ${v.model}`))]
+  const uniqueModels = vehicles.map((v) => ({
+    id: v.id,
+    label: `${v.year} ${v.make} ${v.model}`,
+  }))
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
@@ -41,14 +46,48 @@ export function LeadCapture() {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (validateForm()) {
-      setIsSubmitted(true)
-      toast({
-        title: "¡Solicitud de prueba de manejo enviada!",
-        description: "Te contactaremos en 15 minutos para confirmar.",
+    if (!validateForm()) return
+
+    setIsSubmitting(true)
+
+    const payload = {
+      full_name: formData.name,
+      phone: formData.phone,
+      email: formData.email,
+      message: formData.message,
+      vehicle_interest_id: formData.model !== "any" ? formData.model : null,
+      website: formData.website,
+    }
+
+    try {
+      const response = await fetch("/api/lead", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
       })
+
+      if (response.ok) {
+        setIsSubmitted(true)
+        toast({
+          title: "¡Solicitud de prueba de manejo enviada!",
+          description: "Te contactaremos en 15 minutos para confirmar.",
+        })
+      } else {
+        const error = await response.json()
+        throw new Error(error.error || "Algo salió mal")
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "No se pudo procesar tu solicitud. Intenta más tarde.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -81,6 +120,17 @@ export function LeadCapture() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="bg-card rounded-2xl border border-border p-6 md:p-8">
+              {/* Honeypot */}
+              <Input
+                type="text"
+                name="website"
+                className="hidden"
+                value={formData.website}
+                onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                tabIndex={-1}
+                autoComplete="off"
+              />
+
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="lead-name">Nombre Completo *</Label>
@@ -90,6 +140,7 @@ export function LeadCapture() {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className={errors.name ? "border-destructive" : ""}
+                    required
                   />
                   {errors.name && <p className="text-xs text-destructive">{errors.name}</p>}
                 </div>
@@ -103,6 +154,7 @@ export function LeadCapture() {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     className={errors.email ? "border-destructive" : ""}
+                    required
                   />
                   {errors.email && <p className="text-xs text-destructive">{errors.email}</p>}
                 </div>
@@ -116,6 +168,7 @@ export function LeadCapture() {
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     className={errors.phone ? "border-destructive" : ""}
+                    required
                   />
                   {errors.phone && <p className="text-xs text-destructive">{errors.phone}</p>}
                 </div>
@@ -129,8 +182,8 @@ export function LeadCapture() {
                     <SelectContent>
                       <SelectItem value="any">Cualquier Vehículo</SelectItem>
                       {uniqueModels.map((model) => (
-                        <SelectItem key={model} value={model}>
-                          {model}
+                        <SelectItem key={model.id} value={model.id}>
+                          {model.label}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -154,8 +207,14 @@ export function LeadCapture() {
                   Al enviar este formulario, aceptas ser contactado por nuestro equipo de ventas. Respetamos tu privacidad y nunca
                   compartiremos tu información.
                 </p>
-                <Button type="submit" size="lg" className="w-full md:w-auto">
-                  Solicitar Prueba de Manejo
+                <Button type="submit" size="lg" className="w-full md:w-auto" disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Procesando...
+                    </>
+                  ) : (
+                    "Solicitar Prueba de Manejo"
+                  )}
                 </Button>
               </div>
             </form>

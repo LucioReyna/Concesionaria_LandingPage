@@ -19,19 +19,44 @@ export function TestimonialsContact() {
         e.preventDefault()
         setIsSubmitting(true)
 
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1500))
-        console.log("Form submitted")
+        const formData = new FormData(e.target as HTMLFormElement)
+        const data = {
+            full_name: formData.get("contact-name"),
+            phone: formData.get("contact-phone"),
+            email: formData.get("contact-email"),
+            message: formData.get("contact-message"),
+            vehicle_interest_id: formData.get("vehicle_interest_id") || null,
+            website: formData.get("website"), // Honeypot
+        }
 
-        setIsSubmitting(false)
-        toast({
-            title: "Mensaje enviado",
-            description: "Nos pondremos en contacto contigo a la brevedad.",
-        })
+        try {
+            const response = await fetch("/api/lead", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            })
 
-        // Reset form (optional)
-        const form = e.target as HTMLFormElement
-        form.reset()
+            if (response.ok) {
+                toast({
+                    title: "¡Solicitud recibida!",
+                    description: "Un asesor se contactará con usted a la brevedad.",
+                })
+                    ; (e.target as HTMLFormElement).reset()
+            } else {
+                const error = await response.json()
+                throw new Error(error.error || "Algo salió mal")
+            }
+        } catch (error) {
+            toast({
+                title: "Error",
+                description: error instanceof Error ? error.message : "No se pudo enviar el mensaje. Intente más tarde.",
+                variant: "destructive",
+            })
+        } finally {
+            setIsSubmitting(false)
+        }
     }
 
     // Use 2 testimonials from mock data or hardcoded
@@ -83,6 +108,10 @@ export function TestimonialsContact() {
                             </div>
 
                             <form onSubmit={handleSubmit} className="space-y-8">
+                                {/* Honeypot and Hidden Fields */}
+                                <input type="text" name="website" className="hidden" aria-hidden="true" />
+                                <input type="hidden" name="vehicle_interest_id" value="" />
+
                                 <div className="grid md:grid-cols-2 gap-8">
                                     <div className="space-y-3">
                                         <Label htmlFor="contact-name" className="text-[10px] uppercase tracking-widest text-muted-foreground/60">Nombre Completo</Label>

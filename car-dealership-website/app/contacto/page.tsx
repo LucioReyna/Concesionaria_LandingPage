@@ -17,13 +17,45 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    setIsSubmitting(false)
-    toast({
-      title: "Mensaje enviado",
-      description: "Nos pondremos en contacto contigo a la brevedad.",
-    })
-      ; (e.target as HTMLFormElement).reset()
+
+    const formData = new FormData(e.target as HTMLFormElement)
+    const data = {
+      full_name: formData.get("name"),
+      phone: formData.get("phone"),
+      email: formData.get("email"),
+      message: formData.get("message"),
+      vehicle_interest_id: formData.get("vehicle_interest_id") || null,
+      website: formData.get("website"), // Honeypot
+    }
+
+    try {
+      const response = await fetch("/api/lead", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+
+      if (response.ok) {
+        toast({
+          title: "¡Mensaje enviado!",
+          description: "Nos pondremos en contacto contigo a la brevedad.",
+        })
+          ; (e.target as HTMLFormElement).reset()
+      } else {
+        const error = await response.json()
+        throw new Error(error.error || "Algo salió mal")
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Error al enviar el mensaje.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -101,6 +133,10 @@ export default function ContactPage() {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-10">
+                {/* Honeypot and Hidden Fields */}
+                <input type="text" name="website" className="hidden" aria-hidden="true" />
+                <input type="hidden" name="vehicle_interest_id" value="" />
+
                 <div className="grid md:grid-cols-2 gap-10">
                   <div className="space-y-3">
                     <Label htmlFor="name" className="text-[10px] uppercase tracking-widest text-muted-foreground/60 font-medium">Nombre Completo</Label>
